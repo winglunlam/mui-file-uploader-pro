@@ -19,7 +19,7 @@ A lightweight, customizable file uploader component for React using Material-UI 
 Before installing `react-mui-file-uploader`, make sure you have the required peer dependencies installed:
 
 ```bash
-npm install react react-dom @mui/material @mui/icons-material @emotion/react @emotion/styled
+npm install @mui/material @mui/icons-material @emotion/react @emotion/styled
 ```
 
 ### Install the Package
