@@ -27,7 +27,7 @@ export interface S3Config {
 }
 
 export interface FileUploaderProps {
-  onUpload?: (files: File[]) => void;
+  onUpload?: (files: FileStatus[], updateProgress: (fileId: string, progress: number) => void) => void;
   onDelete?: (files: FileStatus[], id: string) => FileStatus[];
   maxFiles?: number;
   accept?: string; // e.g., "image/*,application/pdf"

@@ -109,8 +109,21 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
         }
       }
     } else {
-      // Use default onUpload callback
-      onUpload?.(files.map(f => f.file));
+      // Use default onUpload callback with progress update function
+      const updateProgress = (fileId: string, progress: number) => {
+        setFiles(prev =>
+          prev.map(f =>
+            f.id === fileId ? { 
+              ...f,
+              status: progress >= 100 ? 'completed' : 'uploading',
+              progress: Math.min(100, Math.max(0, progress)),
+            } : 
+            f
+          )
+        );
+      };
+
+      onUpload?.(files, updateProgress);
     }
   };
 

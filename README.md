@@ -52,15 +52,28 @@ const theme = createUploaderTheme({
 export const App = () => {
   const [uploadStatus, setUploadStatus] = useState<string>('');
 
-  const handleUploadClick = (files: File[]) => {
+  const handleUploadClick = (files: FileStatus[], updateProgress: (fileId: string, progress: number) => void) => {
     setUploadStatus('Uploading...');
     
     // Send files to your API
-    console.log("Files to upload:", files);
+    files.forEach(fileObj => {
+      console.log(`Uploading: ${fileObj.file.name}`);
+      
+      // Simulate upload progress
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.random() * 30;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+        }
+        updateProgress(fileObj.id, progress);
+      }, 500);
+    });
     
     setTimeout(() => {
       setUploadStatus('Success!');
-    }, 2000);
+    }, 3000);
   };
 
   const handleDeleteClick = (files: FileStatus[], id: string) => {
@@ -116,7 +129,7 @@ The main component for file uploads with drag-and-drop support.
 
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `onUpload` | `(files: File[]) => void` | No | - | Callback triggered when user clicks the Upload button. Receives array of File objects. Not used if `s3Config` is provided. |
+| `onUpload` | `(files: FileStatus[], updateProgress: (fileId: string, progress: number) => void) => void` | No | - | Callback triggered when user clicks the Upload button. Receives FileStatus array with file metadata and an `updateProgress` function to update individual file progress (0-100). Not used if `s3Config` is provided. |
 | `onDelete` | `(files: FileStatus[], id: string) => FileStatus[]` | No | - | Callback when a file is deleted. Receives current files array and file ID. Must return updated files array. |
 | `maxFiles` | `number` | No | `5` | Maximum number of files allowed in the uploader. |
 | `accept` | `string` | No | `"*"` | File type filter (e.g., "image/*", "image/*,video/*", ".pdf"). |
@@ -139,6 +152,32 @@ interface FileStatus {
   previewUrl?: string;                           // Preview image URL (auto-generated for images/videos)
   onDelete?: (id: string) => void;              // Delete callback
 }
+```
+
+---
+
+## Progress Tracking in onUpload
+
+The `onUpload` callback receives the `FileStatus` array with file metadata (including unique IDs) and an `updateProgress` callback function that lets you update individual file progress.
+
+### Basic Example with Simulated Upload
+
+```tsx
+const handleUpload = (files: FileStatus[], updateProgress: (fileId: string, progress: number) => void) => {
+  files.forEach(fileObj => {
+    // Simulate upload progress
+    for (let i = 0; i <= 100; i += 10) {
+      setTimeout(() => {
+        updateProgress(fileObj.id, i);
+      }, i * 200);
+    }
+  });
+};
+
+<FileUploader
+  onUpload={handleUpload}
+  onDelete={handleDelete}
+/>
 ```
 
 ---
@@ -304,11 +343,21 @@ export const App = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const handleUploadClick = async (files: File[]) => {
+  const handleUploadClick = async (files: FileStatus[], updateProgress: (fileId: string, progress: number) => void) => {
     setUploadStatus('Uploading...');
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Upload each file and update progress
+    for (const fileObj of files) {
+      try {
+        // Simulate API upload with progress updates
+        for (let i = 0; i <= 100; i += 10) {
+          updateProgress(fileObj.id, i);
+          await new Promise(resolve => setTimeout(resolve, 200));
+        }
+      } catch (error) {
+        console.error(`Upload failed for ${fileObj.file.name}`, error);
+      }
+    }
     
     setUploadStatus(`Successfully uploaded ${files.length} file(s)`);
     setTimeout(() => setUploadStatus(''), 3000);

@@ -14,15 +14,24 @@ const theme = createUploaderTheme({
 export const App = () => {
   const [uploadStatus, setUploadStatus] = useState<string>('');
 
-  const handleUploadClick = (files: File[]) => {
+  const handleUploadClick = async (files: FileStatus[], updateProgress: (fileId: string, progress: number) => void) => {
     setUploadStatus('Uploading...');
     
-    // Send files to your API
-    console.log("Files to upload:", files);
+    // Upload files and update progress asynchronously
+    await Promise.all(files.map(async (fileObj) => {
+      try {
+        // Simulate API upload with progress updates
+        for (let i = 0; i <= 100; i += 10) {
+          updateProgress(fileObj.id, i);
+          await new Promise(resolve => setTimeout(resolve, Math.random() * 200));
+        }
+      } catch (error) {
+        console.error(`Upload failed for ${fileObj.file.name}`, error);
+      }
+    }));
     
-    setTimeout(() => {
-      setUploadStatus('Success!');
-    }, 2000);
+    setUploadStatus(`Successfully uploaded ${files.length} file(s)`);
+    setTimeout(() => setUploadStatus(''), 3000);
   };
 
   const handleDeleteClick = (files: FileStatus[], id: string) => {
