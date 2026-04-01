@@ -2,6 +2,10 @@
 
 A lightweight, customizable file uploader component for React using Material-UI (MUI). Features drag-and-drop support, file previews (images, videos), progress tracking, and full theme customization.
 
+## Demo
+
+[https://winglunlam.github.io/react-mui-file-uploader/](https://winglunlam.github.io/react-mui-file-uploader/)
+
 ## Key Features
 
 - 📁 **Drag & Drop Support** - Intuitive drag-and-drop file uploads
