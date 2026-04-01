@@ -36,7 +36,6 @@ const getStatusIcon = (status: FileStatus['status']) => {
 };
 
 export const FileItem: React.FC<{ fileData: FileStatus }> = ({ fileData }) => {
-  console.log({ fileData });
   return (
     <ListItem
       secondaryAction={

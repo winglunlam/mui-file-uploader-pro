@@ -1,4 +1,4 @@
-import { S3Config } from '../types/index';
+import { S3Config } from '../types';
 
 const DEFAULT_PART_SIZE = 5 * 1024 * 1024; // 5MB
 
@@ -44,9 +44,6 @@ export const uploadToS3 = async (
       const response = await fetch(presignedUrl, {
         method: 'PUT',
         body: partBlob,
-        headers: {
-          'Content-Type': file.type,
-        },
       });
       
       if (!response.ok) {

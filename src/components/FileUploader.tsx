@@ -65,26 +65,28 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
 
   const handleUpload = async () => {
     if (s3Config) {
-      // Upload to S3 using multipart upload
-      for (const fileObj of files) {
-        if (fileObj.status === 'pending') {
-          try {
-            setFiles(prev =>
-              prev.map(f =>
-                f.id === fileObj.id ? { ...f, status: 'uploading' as const } : f
-              )
-            );
+      // Upload to S3 using multipart upload - concurrent uploads
+      const pendingFiles = files.filter(f => f.status === 'pending');
+      
+      // Mark all files as uploading
+      setFiles(prev =>
+        prev.map(f =>
+          f.status === 'pending' ? { ...f, status: 'uploading' as const } : f
+        )
+      );
 
-            const result = await uploadToS3(fileObj.file, s3Config, (progress) => {
-              setFiles(prev =>
-                prev.map(f =>
-                  f.id === fileObj.id
-                    ? { ...f, progress: progress.percentage }
-                    : f
-                )
-              );
-            });
-
+      // Upload all files concurrently
+      const uploadPromises = pendingFiles.map(fileObj =>
+        uploadToS3(fileObj.file, s3Config, (progress) => {
+          setFiles(prev =>
+            prev.map(f =>
+              f.id === fileObj.id
+                ? { ...f, progress: progress.percentage }
+                : f
+            )
+          );
+        })
+          .then((result) => {
             setFiles(prev =>
               prev.map(f =>
                 f.id === fileObj.id
@@ -98,16 +100,19 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
                   : f
               )
             );
-          } catch (error) {
+          })
+          .catch((error) => {
             console.error(`Failed to upload ${fileObj.file.name}:`, error);
             setFiles(prev =>
               prev.map(f =>
                 f.id === fileObj.id ? { ...f, status: 'error' as const } : f
               )
             );
-          }
-        }
-      }
+          })
+      );
+
+      // Wait for all uploads to complete
+      await Promise.all(uploadPromises);
     } else {
       // Use default onUpload callback with progress update function
       const updateProgress = (fileId: string, progress: number) => {

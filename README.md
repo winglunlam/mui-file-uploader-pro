@@ -571,7 +571,13 @@ app.post('/api/s3/complete', async (req, res) => {
       Bucket: process.env.AWS_BUCKET,
       Key: fileKey,
       UploadId: uploadId,
-      MultipartUpload: { Parts: parts },
+      MultipartUpload: {
+        // Map the parts to ensure keys are Uppercase
+        Parts: parts.map(part => ({
+          ETag: part.eTag || part.ETag, // Handle both just in case
+          PartNumber: parseInt(part.partNumber || part.PartNumber)
+        })).sort((a, b) => a.PartNumber - b.PartNumber) // S3 requires parts to be in order
+      },
     };
     await s3.completeMultipartUpload(params).promise();
     res.json({ success: true });
