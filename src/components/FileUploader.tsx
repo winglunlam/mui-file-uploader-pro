@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Box, Typography, Paper, Button, List } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { FileStatus, FileUploaderProps } from './types';
-import { FileItem } from './FileItem.tsx';
+import { FileStatus, FileUploaderProps } from '../types';
+import { FileItem } from './FileItem';
 import { generatePreview } from '../utils/generatePreview';
 
 export const FileUploader: React.FC<FileUploaderProps> = ({ 
