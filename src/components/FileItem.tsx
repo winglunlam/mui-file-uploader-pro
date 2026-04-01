@@ -2,7 +2,7 @@ import React from 'react';
 import { ListItem, ListItemAvatar, Avatar, ListItemText, LinearProgress, IconButton, Box } from '@mui/material';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { FileStatus } from './types';
+import { FileStatus } from '../types';
 
 export const FileItem: React.FC<{ fileData: FileStatus }> = ({ fileData }) => {
   return (
