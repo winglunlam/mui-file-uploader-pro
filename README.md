@@ -7,7 +7,7 @@ A lightweight, customizable file uploader component for React using Material-UI 
 [https://winglunlam.github.io/react-mui-file-uploader/](https://winglunlam.github.io/react-mui-file-uploader/)
 
 ## Showcase
-![Showcase](./assets/showcase.git)
+![Showcase](./assets/showcase.gif)
 
 ## Key Features
 
