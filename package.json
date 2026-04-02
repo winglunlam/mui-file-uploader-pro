@@ -54,7 +54,11 @@
     "file-uploader",
     "dropzone",
     "mui",
-    "material-ui"
+    "material-ui",
+    "aws-s3",
+    "multipart-upload",
+    "progress-bar",
+    "previews"
   ],
   "author": "Alan Lam",
   "license": "MIT"
