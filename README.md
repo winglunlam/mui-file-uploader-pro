@@ -46,15 +46,17 @@ npm install mui-file-uploader-pro
 
 ```tsx
 import React, { useState } from 'react';
-import { ThemeProvider, CssBaseline, Container, Typography, Box, Paper } from '@mui/material';
+import { ThemeProvider, createTheme, CssBaseline, Container, Typography, Box, Paper } from '@mui/material';
 import { FileUploader, createUploaderTheme, FileStatus } from 'mui-file-uploader-pro';
 
-const theme = createUploaderTheme({
-  palette: {
-    primary: { main: '#1976d2' },
-    background: { default: '#f5f5f5' }
-  },
-});
+const theme = createTheme(
+  createUploaderTheme({
+    palette: {
+      primary: { main: '#1976d2' },
+      background: { default: '#f5f5f5' }
+    },
+  })
+);
 
 export const App = () => {
   const [uploadStatus, setUploadStatus] = useState<string>('');
@@ -266,22 +268,24 @@ The FileUploader integrates seamlessly with Material-UI's theming system using `
 
 ```tsx
 import { createUploaderTheme } from 'mui-file-uploader-pro';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
-const customTheme = createUploaderTheme({
-  palette: {
-    primary: {
-      main: '#2196f3',
+const customTheme = createTheme(
+  createUploaderTheme({
+    palette: {
+      primary: {
+        main: '#2196f3',
+      },
+      secondary: {
+        main: '#f50057',
+      },
+      background: {
+        default: '#fafafa',
+        paper: '#ffffff',
+      },
     },
-    secondary: {
-      main: '#f50057',
-    },
-    background: {
-      default: '#fafafa',
-      paper: '#ffffff',
-    },
-  },
-});
+  })
+);
 
 export const App = () => (
   <ThemeProvider theme={customTheme}>
@@ -297,18 +301,20 @@ export const App = () => (
 ### Dark Theme Example
 
 ```tsx
-const darkTheme = createUploaderTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#90caf9',
+const darkTheme = createTheme(
+  createUploaderTheme({
+    palette: {
+      mode: 'dark',
+      primary: {
+        main: '#90caf9',
+      },
+      background: {
+        default: '#121212',
+        paper: '#1e1e1e',
+      },
     },
-    background: {
-      default: '#121212',
-      paper: '#1e1e1e',
-    },
-  },
-});
+  })
+);
 
 <ThemeProvider theme={darkTheme}>
   <FileUploader maxFiles={5} onUpload={handleUpload} />
@@ -323,6 +329,7 @@ const darkTheme = createUploaderTheme({
 import React, { useState } from 'react';
 import {
   ThemeProvider,
+  createTheme,
   CssBaseline,
   Container,
   Typography,
@@ -338,12 +345,14 @@ import ImageIcon from '@mui/icons-material/Image';
 import { FileStatus } from 'mui-file-uploader-pro';
 import { FileUploader, createUploaderTheme } from 'mui-file-uploader-pro';
 
-const theme = createUploaderTheme({
-  palette: {
-    primary: { main: '#1976d2' },
-    background: { default: '#f5f5f5' },
-  },
-});
+const theme = createTheme(
+  createUploaderTheme({
+    palette: {
+      primary: { main: '#1976d2' },
+      background: { default: '#f5f5f5' },
+    },
+  })
+);
 
 export const App = () => {
   const [uploadStatus, setUploadStatus] = useState<string>('');
